@@ -41,7 +41,6 @@ setup(
         "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering :: Information Analysis",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        "Topic :: Software Development :: Libraries :: C++ Libraries",
         "Topic :: System :: Distributed Computing",
         "Topic :: Utilities",
     ],
