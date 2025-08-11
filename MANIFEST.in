@@ -1,0 +1,39 @@
+# Include README and license
+include README.md
+include LICENSE
+
+# Include Python package files
+include python/disjoint_forest/__init__.py
+include python/disjoint_forest/cli.py
+include python/disjoint_forest_bindings.cc
+
+# Include C++ source files
+include disjoint_forest.h
+include disjoint_forest.cc
+
+# Include build configuration
+include CMakeLists.txt
+include Makefile
+include python/Makefile
+include python/setup.py
+include python/requirements.txt
+
+# Include test files
+include disjoint_forest_test.cc
+include example.cc
+
+# Include Python test and example files
+include python/example.py
+include python/README.md
+
+# Exclude build artifacts
+exclude *.so
+exclude *.dll
+exclude *.dylib
+exclude build/
+exclude dist/
+exclude *.egg-info/
+exclude __pycache__/
+exclude *.pyc
+exclude .pytest_cache/
+exclude .coverage 

@@ -1,0 +1,114 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "pybind11>=2.10.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "disjoint-forest"
+version = "1.0.0"
+description = "A high-performance C++ implementation of disjoint-set data structure with Python bindings"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "DisjointForest Contributors"}
+]
+maintainers = [
+    {name = "DisjointForest Contributors"}
+]
+keywords = ["disjoint-set", "union-find", "data-structure", "algorithm", "graph", "optimization"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: C++",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: C++ Libraries",
+    "Topic :: System :: Distributed Computing",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "black>=22.0",
+    "flake8>=4.0",
+    "mypy>=0.900",
+]
+docs = [
+    "sphinx>=4.0",
+    "sphinx-rtd-theme>=1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/disjoint-forest"
+Documentation = "https://disjoint-forest.readthedocs.io/"
+Repository = "https://github.com/yourusername/disjoint-forest"
+"Bug Tracker" = "https://github.com/yourusername/disjoint-forest/issues"
+"Source Code" = "https://github.com/yourusername/disjoint-forest"
+
+# CLI script can be added later when properly configured
+# [project.scripts]
+# disjoint-forest = "disjoint_forest.cli:main"
+
+[tool.setuptools]
+packages = ["disjoint_forest"]
+
+[tool.setuptools.package-data]
+disjoint_forest = ["*.so", "*.dll", "*.dylib"]
+
+[tool.setuptools.package-dir]
+"" = "python"
+
+[tool.setuptools.cmdclass]
+build_ext = "pybind11.setup_utils.build_ext"
+
+# Version is hardcoded for now to avoid import issues during build
+# [tool.setuptools.dynamic]
+# version = {attr = "disjoint_forest.__version__"}
+
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["python/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+] 

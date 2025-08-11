@@ -146,6 +146,9 @@ public:
 
 PYBIND11_MODULE(disjoint_forest, m) {
     m.doc() = "Python bindings for DisjointForest data structure";
+    
+    // Add version information
+    m.attr("__version__") = "1.0.0";
 
     // Bind the PythonNode wrapper
     py::class_<PythonNode>(m, "Node")

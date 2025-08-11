@@ -36,6 +36,16 @@ test: build
 	@echo "Testing Python bindings..."
 	$(PYTHON) -c "import disjoint_forest; print('Import successful!')"
 
+# Test package structure
+package-test: build
+	@echo "Testing package structure..."
+	$(PYTHON) test_package.py
+
+# Create distribution packages
+dist: build
+	@echo "Creating distribution packages..."
+	$(PYTHON) setup.py sdist bdist_wheel
+
 # Show help
 help:
 	@echo "Available targets:"
@@ -46,6 +56,8 @@ help:
 	@echo "  install          - Install the module"
 	@echo "  example          - Run the Python example"
 	@echo "  test             - Test the bindings"
+	@echo "  package-test     - Test package structure"
+	@echo "  dist             - Create distribution packages"
 	@echo "  help             - Show this help message"
 
-.PHONY: all install-deps build clean install example test help 
+.PHONY: all install-deps build clean install example test package-test dist help 
