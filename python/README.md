@@ -68,6 +68,36 @@ print(f"Same set: {same_set}")
 - `capacity()`: Get the current capacity
 - `is_empty()`: Check if the forest is empty
 - `get_all_nodes()`: Get a list of all nodes
+- `get_all_data()`: Get a list of all data values from nodes
+
+## Union Operators
+
+The `DisjointForest` class supports Python's union operators for combining forests:
+
+### `|` Operator (Union)
+Creates a new forest containing all nodes from both forests:
+```python
+forest1 = disjoint_forest.DisjointForest()
+forest1.make_set("A")
+forest1.make_set("B")
+
+forest2 = disjoint_forest.DisjointForest()
+forest2.make_set("C")
+forest2.make_set("D")
+
+# Create union forest
+union_forest = forest1 | forest2
+print(union_forest.get_all_data())  # ['A', 'B', 'C', 'D']
+```
+
+### `|=` Operator (In-place Union)
+Adds all nodes from the second forest to the first forest:
+```python
+forest1 |= forest2
+print(forest1.get_all_data())  # ['A', 'B', 'C', 'D']
+```
+
+**Note**: The union operators create forests with all nodes but do not preserve the union relationships between nodes. They are useful for combining collections of data rather than merging set structures.
 
 ## Examples
 

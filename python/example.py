@@ -154,5 +154,44 @@ def main():
 
     print(f"\nMixed forest size: {mixed_forest.size()}")
 
+    # Union operator example
+    print(f"\n" + "=" * 40)
+    print("Union Operator Example")
+    print("=" * 40)
+
+    # Create two separate forests
+    forest_a = disjoint_forest.DisjointForest(3)
+    forest_b = disjoint_forest.DisjointForest(2)
+
+    # Add some data to forest A
+    node_a1 = forest_a.make_set("Apple")
+    node_a2 = forest_a.make_set("Banana")
+    forest_a.union_sets(node_a1, node_a2)
+
+    # Add some data to forest B
+    node_b1 = forest_b.make_set("Cherry")
+    node_b2 = forest_b.make_set("Date")
+
+    print(f"Forest A: {forest_a.get_all_data()}")
+    print(f"Forest B: {forest_b.get_all_data()}")
+
+    # Use the | operator to create a union
+    union_forest = forest_a | forest_b
+    print(f"Union forest (A | B): {union_forest.get_all_data()}")
+    print(f"Union forest size: {union_forest.size()}")
+
+    # Use the |= operator for in-place union
+    forest_a |= forest_b
+    print(f"Forest A after |= B: {forest_a.get_all_data()}")
+    print(f"Forest A size after |=: {forest_a.size()}")
+
+    # Test with different data types
+    type_forest = disjoint_forest.DisjointForest(2)
+    type_forest.make_set(100)
+    type_forest.make_set("text")
+
+    mixed_union = union_forest | type_forest
+    print(f"Mixed type union: {mixed_union.get_all_data()}")
+
 if __name__ == "__main__":
     main() 

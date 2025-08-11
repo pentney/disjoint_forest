@@ -44,7 +44,8 @@ package-test: build
 # Create distribution packages
 dist: build
 	@echo "Creating distribution packages..."
-	$(PYTHON) setup.py sdist bdist_wheel
+	$(PYTHON) setup.py sdist
+	$(PYTHON) setup.py bdist_wheel --plat-name manylinux2014_x86_64
 
 # Show help
 help:

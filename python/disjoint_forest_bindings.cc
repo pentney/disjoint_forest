@@ -53,6 +53,11 @@ private:
     std::vector<PythonNode*> python_nodes;
 
 public:
+    // Delete copy constructor and assignment operator to prevent copying
+    PythonDisjointForest(const PythonDisjointForest&) = delete;
+    PythonDisjointForest& operator=(const PythonDisjointForest&) = delete;
+
+public:
     PythonDisjointForest() : forest() {}
     PythonDisjointForest(int initial_capacity) : forest(initial_capacity) {}
     
@@ -137,12 +142,66 @@ public:
         return result;
     }
     
+    // Get all data from valid nodes
+    py::list get_all_data() const {
+        py::list result;
+        for (auto* py_node : python_nodes) {
+            if (py_node->valid()) {
+                result.append(py_node->get_data());
+            }
+        }
+        return result;
+    }
+    
+    // In-place union operator - adds nodes from other forest
+    PythonDisjointForest& __ior__(const PythonDisjointForest* other) {
+        // Expand capacity if needed
+        int needed_capacity = forest.capacity() + other->forest.capacity();
+        if (needed_capacity > forest.capacity()) {
+            forest.expand(needed_capacity - forest.capacity());
+        }
+        
+        // Add all nodes from other forest
+        for (auto* py_node : other->python_nodes) {
+            if (py_node->valid()) {
+                make_set(py_node->get_data());
+            }
+        }
+        
+        return *this;
+    }
+    
     ~PythonDisjointForest() {
         for (auto* py_node : python_nodes) {
             delete py_node;
         }
     }
 };
+
+// Free function for union operator - returns a new forest
+PythonDisjointForest* forest_union(const PythonDisjointForest* self, const PythonDisjointForest* other) {
+    // Create a new forest with combined capacity
+    PythonDisjointForest* result = new PythonDisjointForest(self->capacity() + other->capacity());
+    
+    // Get all data from both forests and create new sets
+    py::list self_data = self->get_all_data();
+    py::list other_data = other->get_all_data();
+    
+    // Add all data from self forest
+    for (const auto& item : self_data) {
+        result->make_set(py::cast<py::object>(item));
+    }
+    
+    // Add all data from other forest
+    for (const auto& item : other_data) {
+        result->make_set(py::cast<py::object>(item));
+    }
+    
+    // Note: We can't easily copy the union relationships without
+    // more complex logic, so this creates a forest with all nodes
+    // but no unions between them
+    return result;
+}
 
 PYBIND11_MODULE(disjoint_forest, m) {
     m.doc() = "Python bindings for DisjointForest data structure";
@@ -168,6 +227,9 @@ PYBIND11_MODULE(disjoint_forest, m) {
         .def("clear", &PythonDisjointForest::clear)
         .def("size", &PythonDisjointForest::size)
         .def("capacity", &PythonDisjointForest::capacity)
+        .def("__ior__", &PythonDisjointForest::__ior__)
         .def("is_empty", &PythonDisjointForest::is_empty)
-        .def("get_all_nodes", &PythonDisjointForest::get_all_nodes);
+        .def("get_all_nodes", &PythonDisjointForest::get_all_nodes)
+        .def("get_all_data", &PythonDisjointForest::get_all_data)
+        .def("__or__", &forest_union);
 } 

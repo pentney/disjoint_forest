@@ -7,6 +7,8 @@ from setuptools import setup, Extension, find_packages
 import pybind11
 from pybind11 import get_cmake_dir
 import pybind11.commands
+import sys
+import os
 
 # Read the README for long description
 with open("../README.md", "r", encoding="utf-8") as fh:
@@ -60,6 +62,7 @@ setup(
         ),
     ],
     zip_safe=False,
+
     keywords="disjoint-set, union-find, data-structure, algorithm, graph, optimization",
     install_requires=[],
     extras_require={
