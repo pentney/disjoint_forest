@@ -9,7 +9,10 @@ A C++ implementation of a disjoint-set data structure (also known as union-find)
 - **Union by Rank**: Optimizes union operations by maintaining tree depth information
 - **Dynamic Operations**: Expand capacity, contract nodes, and clear the forest
 - **Memory Efficient**: STL vectors with automatic memory management
+- **Smart Pointers**: Uses `std::unique_ptr` for automatic memory cleanup
+- **Exception Safety**: Proper error handling with `std::invalid_argument` and `std::runtime_error`
 - **Comprehensive Testing**: Full unit test suite using Google Test
+- **Python Bindings**: Full Python interface with pybind11
 
 ## Class Structure
 
@@ -24,24 +27,51 @@ A C++ implementation of a disjoint-set data structure (also known as union-find)
 - `unionSets(Node<T>* node1, Node<T>* node2)`: Merges two sets
 - Constructor takes the maximum number of elements as parameter
 
+#### Dynamic Operations
+- `expand(int additional_capacity)`: Increases the forest's capacity by the specified amount
+- `contract(Node<T>* node)`: Removes a node from the forest, updating parent references
+- `clear()`: Removes all nodes and resets the forest to empty state
+- `size()`: Returns the current number of nodes in the forest
+- `capacity()`: Returns the total capacity allocated for the forest
+- `isEmpty()`: Returns true if the forest contains no nodes
+- `getAllNodes()`: Returns a vector of all current nodes in the forest
+
 ## Building the Project
 
 ### Prerequisites
 - CMake 3.10 or higher
 - C++17 compatible compiler
 - Google Test library
+- Python 3.6+ (for Python bindings)
+- pybind11 (for Python bindings)
 
-### Install Google Test (Ubuntu/Debian)
+### Install Google Test
+
+#### Ubuntu/Debian
 ```bash
 sudo apt-get install libgtest-dev
 ```
 
-### Install Google Test (macOS)
+#### macOS
 ```bash
 brew install googletest
 ```
 
+#### CentOS/RHEL/Fedora
+```bash
+sudo yum install gtest-devel
+# or for newer versions
+sudo dnf install gtest-devel
+```
+
+#### Arch Linux
+```bash
+sudo pacman -S gtest
+```
+
 ### Build Steps
+
+#### Using CMake
 ```bash
 # Create build directory
 mkdir build
@@ -60,6 +90,31 @@ make test
 ./disjoint_forest_example
 ```
 
+#### Using Makefile (Alternative)
+```bash
+# Build everything including Python bindings
+make all
+
+# Build only C++ components
+make cpp
+
+# Build Python bindings
+make python-bindings
+
+# Run all tests
+make test
+
+# Run Python tests
+make python-test
+
+# Run examples
+make example
+make python-example
+
+# Clean build artifacts
+make clean
+```
+
 ## Running Tests
 
 The test suite covers:
@@ -67,13 +122,15 @@ The test suite covers:
 1. **Basic Operations**: Constructor, destructor, makeSet
 2. **Find Operations**: Single node find, path compression
 3. **Union Operations**: Basic union, union by rank, same set union
-4. **Complex Scenarios**: Multiple unions, large datasets
-5. **Edge Cases**: Empty forests, single element forests
-6. **Memory Management**: Large operations, proper cleanup
-7. **Template Support**: Tests with different data types (int, string)
+4. **Dynamic Operations**: Expand capacity, contract nodes, clear forest, size/capacity queries
+5. **Complex Scenarios**: Multiple unions, large datasets, dynamic capacity changes
+6. **Edge Cases**: Empty forests, single element forests, contraction edge cases
+7. **Memory Management**: Large operations, proper cleanup, dynamic memory allocation
+8. **Template Support**: Tests with different data types (int, string)
 
 ## Example Usage
 
+### Basic Operations
 ```cpp
 #include "disjoint_forest.h"
 
@@ -98,19 +155,187 @@ Node<int>* rep3 = forest.find(node3);
 assert(rep1 == rep2 && rep2 == rep3);
 ```
 
+### Dynamic Operations
+```cpp
+// Expand capacity when needed
+forest.expand(50);  // Add capacity for 50 more elements
+
+// Check current state
+std::cout << "Size: " << forest.size() << std::endl;
+std::cout << "Capacity: " << forest.capacity() << std::endl;
+std::cout << "Is empty: " << (forest.isEmpty() ? "Yes" : "No") << std::endl;
+
+// Get all nodes for iteration
+auto all_nodes = forest.getAllNodes();
+for (auto* node : all_nodes) {
+    std::cout << "Node data: " << node->data << std::endl;
+}
+
+// Contract (remove) a node
+forest.contract(node2);
+
+// Clear the entire forest
+forest.clear();
+```
+
 ## Algorithm Complexity
 
 - **makeSet**: O(1)
 - **find**: O(α(n)) amortized, where α is the inverse Ackermann function
 - **unionSets**: O(α(n)) amortized
+- **expand**: O(1) amortized (vector doubling strategy)
+- **contract**: O(1) (marking nodes as invalid)
+- **clear**: O(n) where n is the number of nodes
+- **size/capacity/isEmpty**: O(1)
+- **getAllNodes**: O(n) where n is the number of nodes
 - **Space**: O(n) where n is the number of elements
+
+## Use Cases
+
+Disjoint-set data structures are fundamental to many algorithms and applications:
+
+- **Graph Algorithms**: Connected components, minimum spanning trees (Kruskal's algorithm)
+- **Image Processing**: Connected component labeling, flood fill algorithms
+- **Network Analysis**: Community detection, clustering algorithms
+- **Game Development**: Pathfinding, collision detection systems
+- **Database Systems**: Transaction management, dependency resolution
+- **Compiler Design**: Register allocation, live variable analysis
+
+## Python Bindings
+
+The project includes Python bindings that provide a unified interface for working with any Python object type. The bindings are built using pybind11 and offer the same functionality as the C++ implementation.
+
+### Features
+- **Type Flexibility**: Works with integers, strings, lists, dictionaries, custom objects, etc.
+- **Unified API**: Single `DisjointForest` class that handles any Python object type
+- **Safe Operations**: Built-in safety checks and error handling
+- **Memory Management**: Automatic cleanup of Python references
+
+### Installation
+```bash
+# Install Python dependencies
+cd python
+pip3 install -r requirements.txt
+
+# Build the Python module
+make build
+
+# Test the bindings
+make test
+
+# Run the example
+make example
+```
+
+### Python Usage
+```python
+import disjoint_forest
+
+# Create a forest
+forest = disjoint_forest.DisjointForest(10)
+
+# Create sets with different types
+node1 = forest.make_set(42)
+node2 = forest.make_set("hello")
+node3 = forest.make_set([1, 2, 3])
+
+# Union operations
+forest.union_sets(node1, node2)
+
+# Find representatives
+rep = forest.find(node1)
+print(f"Representative: {rep.data}")
+
+# Dynamic operations
+forest.expand(20)
+print(f"Capacity: {forest.capacity()}")
+print(f"Size: {forest.size()}")
+
+# Get all nodes
+all_nodes = forest.get_all_nodes()
+for node in all_nodes:
+    print(f"Node: {node.data}")
+```
+
+## Implementation Details
+
+### STL Vector Usage
+The implementation uses `std::vector` instead of fixed-size arrays, providing several advantages:
+- **Dynamic Capacity**: The forest can grow beyond its initial capacity using the `expand()` method
+- **Automatic Memory Management**: Vectors handle memory allocation and deallocation automatically
+- **Efficient Resizing**: STL vectors use exponential growth strategies for optimal performance
+- **Exception Safety**: Vector operations provide strong exception guarantees
+
+### Memory Management
+- **Smart Pointers**: `std::unique_ptr` ensures automatic cleanup of Node objects
+- **RAII Principles**: Resource acquisition is tied to object lifetime
+- **Exception Safety**: Memory is properly cleaned up even when exceptions occur
+- **Python Integration**: Python bindings include reference counting and safe memory management
 
 ## Notes
 
 - The implementation automatically handles path compression during find operations
 - Union by rank ensures balanced trees for optimal performance
 - Memory is automatically managed with proper cleanup in the destructor
+- Python bindings provide safe access to all C++ functionality
+- Dynamic operations maintain the forest's integrity while allowing flexible capacity management
+
+## Troubleshooting
+
+### Common Build Issues
+
+#### Google Test Not Found
+If you encounter linking errors with Google Test:
+```bash
+# The Makefile will automatically install Google Test if needed
+make install-deps
+
+# Or manually install for your system (see Prerequisites section)
+```
+
+#### Python Import Errors
+If Python can't import the module:
+```bash
+# Ensure the module is built
+cd python
+make build
+
+# Check if the shared library exists
+ls -la *.so
+
+# Verify Python path
+python3 -c "import sys; print(sys.path)"
+```
+
+#### Memory Issues
+The implementation uses smart pointers and RAII principles. If you encounter memory issues:
+- Ensure you're not manually deleting Node pointers
+- Use the provided methods (`clear()`, `contract()`) instead of manual memory management
+- Check that Python bindings are properly handling object lifetimes
 
 ## Contributing
 
-Feel free to submit issues, feature requests, or pull requests to improve the implementation or test coverage. 
+We welcome contributions to improve the implementation, test coverage, or documentation. Please:
+
+1. **Fork the repository** and create a feature branch
+2. **Follow the existing code style** and naming conventions
+3. **Add tests** for new functionality
+4. **Update documentation** to reflect any changes
+5. **Submit a pull request** with a clear description of your changes
+
+### Development Setup
+```bash
+# Clone and setup
+git clone <your-fork-url>
+cd disjoint_set
+
+# Install development dependencies
+make install-deps
+
+# Run all tests to ensure everything works
+make test
+make python-test
+
+# Build everything
+make all
+``` 
