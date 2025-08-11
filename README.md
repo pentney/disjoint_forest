@@ -72,24 +72,6 @@ The test suite covers:
 6. **Memory Management**: Large operations, proper cleanup
 7. **Template Support**: Tests with different data types (int, string)
 
-### Test Output Example
-```
-[==========] Running 12 tests from 2 test suites.
-[----------] Global test environment set-up.
-[----------] 12 tests from DisjointForestIntTest
-[ RUN      ] DisjointForestIntTest.ConstructorDestructor
-[       OK ] DisjointForestIntTest.ConstructorDestructor (0 ms)
-[ RUN      ] DisjointForestIntTest.MakeSet
-[       OK ] DisjointForestIntTest.MakeSet (0 ms)
-...
-[----------] 12 tests from DisjointForestIntTest (0 ms total)
-[----------] 0 tests from DisjointForestStringTest
-[----------] 0 tests from DisjointForestStringTest (0 ms total)
-[----------] Global test environment tear-down
-[==========] 12 tests from 2 test suites ran. (0 ms total)
-[  PASSED  ] 12 tests.
-```
-
 ## Example Usage
 
 ```cpp
@@ -125,7 +107,6 @@ assert(rep1 == rep2 && rep2 == rep3);
 
 ## Notes
 
-- The `union` keyword is reserved in C++, so the method is named `unionSets`
 - The implementation automatically handles path compression during find operations
 - Union by rank ensures balanced trees for optimal performance
 - Memory is automatically managed with proper cleanup in the destructor
