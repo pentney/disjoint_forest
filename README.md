@@ -1,6 +1,6 @@
 # DisjointForest
 
-A C++ implementation of a disjoint-set data structure (also known as union-find) using the disjoint forest representation with path compression and union by rank optimizations. This is intended to fill a void in too many existing standard libraries, which don't include a proper implementation of this despite its utility in many applications.
+A C++ implementation of a disjoint-set data structure (also known as union-find) using the disjoint forest representation with path compression and union by rank optimizations, with Python bindings included as well. This is intended to fill a void in too many existing standard libraries, which don't include a proper implementation of this despite its utility in many applications.
 
 ## Features
 
