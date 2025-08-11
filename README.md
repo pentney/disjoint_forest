@@ -2,7 +2,7 @@
 
 A C++ implementation of a disjoint-set data structure (also known as union-find) using the disjoint forest representation with path compression and union by rank optimizations, with Python bindings included as well. (See python/README.md for more information about the Python bindings.)
 
-This package is intended to fill a void in too many existing standard libraries, which don't include a proper implementation of this despite its utility in many applications. The disjoint forest can be useful for efficiently grouping together data items under a single common "representative", e.g. for term disambiguation in information retrieval and RAG applications.
+This package is intended to fill a void in too many existing standard libraries, which don't include a proper implementation of this despite its utility in many applications. The disjoint forest can be useful for efficiently grouping together data items under a single common "representative", e.g. for merging synonyms in information retrieval and RAG applications.
 
 ## Features
 
